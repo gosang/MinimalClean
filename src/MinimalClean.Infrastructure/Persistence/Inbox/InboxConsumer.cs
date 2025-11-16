@@ -48,17 +48,19 @@ public class InboxConsumer : BackgroundService
                 using var scope = _sp.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                // Deduplication
+                // Deduplication check
                 if (string.IsNullOrWhiteSpace(payloadHash) ||
                     await db.InboxRecords.AnyAsync(r => r.PayloadHash == payloadHash, stoppingToken))
                 {
                     _logger.LogInformation("Skipped duplicate or missing-hash message");
+                    await channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
                     return;
                 }
 
                 db.InboxRecords.Add(new InboxRecord { PayloadHash = payloadHash });
                 await db.SaveChangesAsync(stoppingToken);
 
+                // Deserialize and handle event
                 var typeName = ea.BasicProperties.Type;
                 var type = Type.GetType(typeName)!;
                 var ev = (Domain.Common.IDomainEvent)JsonSerializer.Deserialize(payload, type)!;
@@ -72,6 +74,9 @@ public class InboxConsumer : BackgroundService
                     await (Task)method.Invoke(handler, new object[] { ev, stoppingToken })!;
                 }
 
+                // ✅ ACK only after successful deduplication + handler execution
+                await channel.BasicAckAsync(ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
+
                 _logger.LogInformation("Processed event {Type} with hash {Hash}", typeName, payloadHash);
             }
             catch (Exception ex)
@@ -81,7 +86,8 @@ public class InboxConsumer : BackgroundService
             }
         };
 
-        await channel.BasicConsumeAsync(queue.QueueName, autoAck: true, consumer, cancellationToken: stoppingToken);
+        // autoAck: false → manual ack required
+        await channel.BasicConsumeAsync(queue.QueueName, autoAck: false, consumer, cancellationToken: stoppingToken);
 
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
