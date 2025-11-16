@@ -15,6 +15,7 @@ using MinimalClean.Infrastructure.Persistence.Outbox;
 using MinimalClean.Infrastructure.Persistence.Repositories;
 using Polly;
 using Polly.Retry;
+using RabbitMQ.Client;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,13 @@ var builder = WebApplication.CreateBuilder(args);
 //    o.GroupNameFormat = "'v'VVV";
 //    o.SubstituteApiVersionInUrl = true;
 //});
+
+builder.Services.AddSingleton(new ConnectionFactory
+{
+    HostName = "localhost",   // or your broker host
+    UserName = "guest",
+    Password = "guest"
+});
 
 // Resilience
 builder.Services.AddResiliencePipeline("outboxPublisher", pipeline =>
