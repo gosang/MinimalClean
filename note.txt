@@ -27,8 +27,6 @@ Consider Outbox + Inbox pattern for distributed consistency.
 
 If scaling, replace background worker with a queue processor (e.g., Kafka, RabbitMQ).
 
-👉 Would you like me to extend this outbox so it publishes to a message broker (like RabbitMQ or Azure Service Bus) instead of just invoking in‑process handlers? That would make it production‑ready for microservices.
-
 
 🚀 Next steps
 Add consumer idempotency (Inbox pattern) so downstream services ignore duplicates.
