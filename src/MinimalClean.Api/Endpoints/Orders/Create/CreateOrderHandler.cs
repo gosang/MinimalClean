@@ -30,7 +30,8 @@ public class CreateOrderHandler : IHandler<CreateOrderCommand, Guid>
             {
                 OccurredUtc = ev.OccurredUtc,
                 Type = ev.GetType().FullName!,
-                Payload = JsonSerializer.Serialize(ev)
+                Payload = JsonSerializer.Serialize(ev),
+                DeduplicationKey = $"{ev.GetType().Name}:{order.Id}" // simple example
             };
             _db.OutboxMessages.Add(message);
         }

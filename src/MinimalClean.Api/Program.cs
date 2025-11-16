@@ -76,7 +76,9 @@ builder.Services.Scan(scan => scan
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
+// Outbox
 builder.Services.AddHostedService<OutboxPublisher>();
+builder.Services.AddHostedService<OutboxCleanupWorker>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

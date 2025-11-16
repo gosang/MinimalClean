@@ -8,4 +8,7 @@ public class OutboxMessage
     public string Payload { get; set; } = default!;
     public bool Published { get; set; } = false;
     public DateTime? PublishedUtc { get; set; }
+
+    // Deduplication key (e.g., hash of payload or event ID)
+    public string DeduplicationKey { get; set; } = default!;
 }

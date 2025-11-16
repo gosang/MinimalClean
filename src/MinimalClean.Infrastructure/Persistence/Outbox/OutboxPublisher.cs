@@ -32,8 +32,18 @@ public class OutboxPublisher : BackgroundService
                     .Take(20)
                     .ToListAsync(stoppingToken);
 
+                var seenKeys = new HashSet<string>();
+
                 foreach (var msg in pending)
                 {
+                    if (!seenKeys.Add(msg.DeduplicationKey))
+                    {
+                        _logger.LogWarning("Skipping duplicate outbox message {Key}", msg.DeduplicationKey);
+                        msg.Published = true; // mark as published to avoid retry
+                        msg.PublishedUtc = DateTime.UtcNow;
+                        continue;
+                    }
+
                     try
                     {
                         // Deserialize event
