@@ -21,7 +21,7 @@ public class GetOrderByIdEndpoint : IEndpoint
            .Produces(404);
     }
 
-    private async Task<IResult> HandleAsync(Guid id, CancellationToken ct)
+    public async Task<IResult> HandleAsync(Guid id, CancellationToken ct)
     {
         _logger.LogInformation("Fetching order {OrderId}", id);
 

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalClean.Domain", "Mini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalClean.Infrastructure", "MinimalClean.Infrastructure\MinimalClean.Infrastructure.csproj", "{B3D35BF7-5DBC-4F84-9274-7CEA1873DE71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalClean.Api.UnitTests", "..\tests\MinimalClean.Api.UnitTests\MinimalClean.Api.UnitTests.csproj", "{95421274-F498-492E-8CB8-50460CFB21DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B3D35BF7-5DBC-4F84-9274-7CEA1873DE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3D35BF7-5DBC-4F84-9274-7CEA1873DE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3D35BF7-5DBC-4F84-9274-7CEA1873DE71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95421274-F498-492E-8CB8-50460CFB21DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95421274-F498-492E-8CB8-50460CFB21DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95421274-F498-492E-8CB8-50460CFB21DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95421274-F498-492E-8CB8-50460CFB21DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

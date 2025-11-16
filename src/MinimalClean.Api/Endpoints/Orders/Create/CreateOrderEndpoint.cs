@@ -27,7 +27,7 @@ public class CreateOrderEndpoint : IEndpoint
            .Produces(400);
     }
 
-    private async Task<IResult> HandleAsync(CreateOrderRequest req, HttpContext ctx, CancellationToken ct)
+    public async Task<IResult> HandleAsync(CreateOrderRequest req, HttpContext ctx, CancellationToken ct)
     {
         _logger.LogInformation("Handling CreateOrder request for customer {Customer}", req.CustomerName);
 
