@@ -1,4 +1,5 @@
 ﻿using MinimalClean.Application.Abstractions;
+using MinimalClean.Application.Orders.Dtos;
 using MinimalClean.Infrastructure.Persistence.Repositories;
 
 namespace MinimalClean.Api.Endpoints.Orders.GetById;

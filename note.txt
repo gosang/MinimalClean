@@ -1,5 +1,3 @@
-# MinimalClean
-
 Practical notes
 Pagination and sorting:
 

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
-using MinimalClean.Api.Endpoints.Orders;
 using MinimalClean.Api.Endpoints.Orders.GetById;
+using MinimalClean.Application.Orders.Dtos;
 using Moq;
 
 namespace MinimalClean.Api.UnitTests.Endpoints.Orders;

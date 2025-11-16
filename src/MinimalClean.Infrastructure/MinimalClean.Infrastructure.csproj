@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MinimalClean.Application\MinimalClean.Application.csproj" />
     <ProjectReference Include="..\MinimalClean.Domain\MinimalClean.Domain.csproj" />
   </ItemGroup>
 

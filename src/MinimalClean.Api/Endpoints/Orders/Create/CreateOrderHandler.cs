@@ -8,7 +8,10 @@ public class CreateOrderHandler : IHandler<CreateOrderCommand, Guid>
 {
     private readonly IOrderRepository _repo;
 
-    public CreateOrderHandler(IOrderRepository repo) => _repo = repo;
+    public CreateOrderHandler(IOrderRepository repo)
+    {
+        _repo = repo;
+    }
 
     public async Task<Guid> Handle(CreateOrderCommand cmd, CancellationToken ct)
     {

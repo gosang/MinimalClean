@@ -1,6 +1,9 @@
-﻿namespace MinimalClean.Domain.Orders;
+﻿using MinimalClean.Domain.Common;
+using MinimalClean.Domain.Orders.Events;
 
-public class Order
+namespace MinimalClean.Domain.Orders;
+
+public class Order : HasDomainEvents
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
     public string CustomerName { get; private set; }
@@ -11,6 +14,7 @@ public class Order
     {
         CustomerName = customerName;
         Total = total;
+        Raise(new OrderCreated(Id, CustomerName));
     }
 
     public void MarkPaid() => Status = OrderStatus.Paid;

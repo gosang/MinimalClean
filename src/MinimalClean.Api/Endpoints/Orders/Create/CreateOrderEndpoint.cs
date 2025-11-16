@@ -22,6 +22,8 @@ public class CreateOrderEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("/orders", HandleAsync)
+           .AddEndpointFilter<ValidationFilter<CreateOrderRequest>>()
+           .AddEndpointFilter<IdempotencyFilter>() // Clients must send an Idempotency-Key header. Replays will return a safe response without duplicating side effects.
            .WithName("CreateOrder")
            .Produces(201)
            .Produces(400);
@@ -31,18 +33,12 @@ public class CreateOrderEndpoint : IEndpoint
     {
         _logger.LogInformation("Handling CreateOrder request for customer {Customer}", req.CustomerName);
 
-        var validation = await _validator.ValidateAsync(req, ct);
-        if (!validation.IsValid)
-        {
-            _logger.LogWarning("Validation failed for CreateOrder request: {Errors}",
-                string.Join(", ", validation.Errors.Select(e => e.ErrorMessage)));
-            return validation.ToBadRequest();
-        }
-
         var id = await _handler.Handle(new CreateOrderCommand(req.CustomerName, req.Total), ct);
+
         _logger.LogInformation("Order {OrderId} created successfully for {Customer}", id, req.CustomerName);
 
         var uri = $"{ctx.Request.Scheme}://{ctx.Request.Host}/orders/{id}";
+
         return Results.Created(uri, new { id });
     }
 }
