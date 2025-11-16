@@ -40,7 +40,7 @@ public class InboxConsumer : BackgroundService
             {
                 var payload = Encoding.UTF8.GetString(ea.Body.ToArray());
 
-                var headers = ea.BasicProperties.Headers ?? new Dictionary<string, object>();
+                var headers = ea.BasicProperties.Headers ?? new Dictionary<string, object?>();
                 var payloadHash = headers.TryGetValue("PayloadHash", out var h)
                     ? h is byte[] hb ? Encoding.UTF8.GetString(hb) : h?.ToString() ?? ""
                     : "";
@@ -62,7 +62,7 @@ public class InboxConsumer : BackgroundService
 
                 // Deserialize and handle event
                 var typeName = ea.BasicProperties.Type;
-                var type = Type.GetType(typeName)!;
+                Type type = Type.GetType(typeName)!;
                 var ev = (Domain.Common.IDomainEvent)JsonSerializer.Deserialize(payload, type)!;
 
                 var handlerType = typeof(Application.Abstractions.IDomainEventHandler<>).MakeGenericType(type);

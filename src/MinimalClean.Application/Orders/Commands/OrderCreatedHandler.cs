@@ -2,7 +2,7 @@
 using MinimalClean.Application.Abstractions;
 using MinimalClean.Domain.Orders.Events;
 
-namespace MinimalClean.Application.Orders.Handlers;
+namespace MinimalClean.Application.Orders.Commands;
 
 public class OrderCreatedHandler : IDomainEventHandler<OrderCreated>
 {

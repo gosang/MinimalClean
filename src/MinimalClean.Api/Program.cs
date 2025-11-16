@@ -6,7 +6,7 @@ using MinimalClean.Api.Endpoints.Orders.GetById;
 using MinimalClean.Api.Endpoints.Orders.List;
 using MinimalClean.Api.Middleware;
 using MinimalClean.Application.Abstractions;
-using MinimalClean.Application.Orders.Handlers;
+using MinimalClean.Application.Orders.Commands;
 using MinimalClean.Domain.Orders.Events;
 using MinimalClean.Infrastructure.Events;
 using MinimalClean.Infrastructure.Persistence;
