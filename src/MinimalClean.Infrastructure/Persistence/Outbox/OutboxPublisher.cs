@@ -66,12 +66,11 @@ public class OutboxPublisher : BackgroundService
                             MessageId = msg.Id.ToString(),
                             Type = msg.Type,
                             Persistent = true,
-                            Headers = new Dictionary<string, object> { ["PayloadHash"] = msg.PayloadHash }
+                            Headers = new Dictionary<string, object?> { ["PayloadHash"] = msg.PayloadHash }
                         };
 
-
                         // Deduplication: use PayloadHash as messageId or header
-                        props.Headers = new Dictionary<string, object> {
+                        props.Headers = new Dictionary<string, object?> {
                             ["PayloadHash"] = msg.PayloadHash
                         };
 

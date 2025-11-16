@@ -38,3 +38,8 @@ Configure dead‑letter queues for failed messages.
 Add metrics/logging for retry counts and failures.
 
 Secure RabbitMQ connection with TLS and credentials.
+
+
+Add TTL cleanup for old inbox records (similar to outbox).
+
+Add dead‑letter queue for failed messages.

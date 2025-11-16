@@ -106,6 +106,9 @@ builder.Services.AddHostedService<OutboxCleanupWorker>();
 // Inbox
 builder.Services.AddHostedService<InboxConsumer>();
 builder.Services.AddHostedService<InboxCleanupWorker>();
+// builder.Services.AddHostedService<DlqConsumer>();
+// builder.Services.AddSingleton<IEmailNotificationService, EmailNotificationService>();
+// builder.Services.AddHostedService<DlqBatchConsumer>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
