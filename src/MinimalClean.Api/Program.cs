@@ -13,6 +13,8 @@ using MinimalClean.Infrastructure.Persistence;
 using MinimalClean.Infrastructure.Persistence.Idempotency;
 using MinimalClean.Infrastructure.Persistence.Outbox;
 using MinimalClean.Infrastructure.Persistence.Repositories;
+using Polly;
+using Polly.Retry;
 using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,18 @@ var builder = WebApplication.CreateBuilder(args);
 //    o.GroupNameFormat = "'v'VVV";
 //    o.SubstituteApiVersionInUrl = true;
 //});
+
+// Resilience
+builder.Services.AddResiliencePipeline("outboxPublisher", pipeline =>
+{
+    pipeline.AddRetry(new RetryStrategyOptions
+    {
+        MaxRetryAttempts = 5,
+        Delay = TimeSpan.FromSeconds(2),
+        BackoffType = DelayBackoffType.Exponential,
+        UseJitter = true
+    });
+});
 
 // Infrastructure
 // DbContext (replace with your connection string)

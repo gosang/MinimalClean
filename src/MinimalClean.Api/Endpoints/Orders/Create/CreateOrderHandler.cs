@@ -3,6 +3,8 @@ using MinimalClean.Domain.Orders;
 using MinimalClean.Infrastructure.Persistence;
 using MinimalClean.Infrastructure.Persistence.Outbox;
 using MinimalClean.Infrastructure.Persistence.Repositories;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 namespace MinimalClean.Api.Endpoints.Orders.Create;
@@ -18,6 +20,13 @@ public class CreateOrderHandler : IHandler<CreateOrderCommand, Guid>
         _db = db;
     }
 
+    private static string ComputeHash(string payload)
+    {
+        using var sha = SHA256.Create();
+        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(payload));
+        return Convert.ToHexString(bytes);
+    }
+
     public async Task<Guid> Handle(CreateOrderCommand cmd, CancellationToken ct)
     {
         var order = new Order(cmd.CustomerName, cmd.Total);
@@ -26,11 +35,14 @@ public class CreateOrderHandler : IHandler<CreateOrderCommand, Guid>
         // Persist domain events into Outbox
         foreach (var ev in order.DomainEvents)
         {
+            var payload = JsonSerializer.Serialize(ev);
+
             var message = new OutboxMessage
             {
                 OccurredUtc = ev.OccurredUtc,
                 Type = ev.GetType().FullName!,
                 Payload = JsonSerializer.Serialize(ev),
+                PayloadHash = ComputeHash(payload),
                 DeduplicationKey = $"{ev.GetType().Name}:{order.Id}" // simple example
             };
             _db.OutboxMessages.Add(message);

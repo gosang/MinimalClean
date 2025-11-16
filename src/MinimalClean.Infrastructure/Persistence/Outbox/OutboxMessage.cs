@@ -6,6 +6,7 @@ public class OutboxMessage
     public DateTime OccurredUtc { get; set; }
     public string Type { get; set; } = default!;
     public string Payload { get; set; } = default!;
+    public string PayloadHash { get; set; } = default!;
     public bool Published { get; set; } = false;
     public DateTime? PublishedUtc { get; set; }
 
