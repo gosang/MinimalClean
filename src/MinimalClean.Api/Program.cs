@@ -11,6 +11,7 @@ using MinimalClean.Domain.Orders.Events;
 using MinimalClean.Infrastructure.Events;
 using MinimalClean.Infrastructure.Persistence;
 using MinimalClean.Infrastructure.Persistence.Idempotency;
+using MinimalClean.Infrastructure.Persistence.Inbox;
 using MinimalClean.Infrastructure.Persistence.Outbox;
 using MinimalClean.Infrastructure.Persistence.Repositories;
 using Polly;
@@ -101,6 +102,9 @@ builder.Services.Scan(scan => scan
 // Outbox
 builder.Services.AddHostedService<OutboxPublisher>();
 builder.Services.AddHostedService<OutboxCleanupWorker>();
+
+// Inbox
+builder.Services.AddHostedService<InboxConsumer>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MinimalClean.Domain.Orders;
+using MinimalClean.Infrastructure.Persistence.Inbox;
 using MinimalClean.Infrastructure.Persistence.Outbox;
 
 namespace MinimalClean.Infrastructure.Persistence;
@@ -11,4 +12,6 @@ public class AppDbContext : DbContext
     public DbSet<Idempotency.IdempotencyRecord> Idempotency => Set<Idempotency.IdempotencyRecord>();
 
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
+
+    public DbSet<InboxRecord> InboxRecords => Set<InboxRecord>();
 }
