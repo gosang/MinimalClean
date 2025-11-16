@@ -1,104 +1,113 @@
-# MinimalClean
+# 📖 Project Overview: .NET 8 Minimal API
 
-📖 Project Overview: .NET 8 Minimal API
-🏗️ Architecture
+## 🏗️ Architecture
+
 Minimal API: Built with .NET 8’s lightweight HTTP pipeline, using Program.cs as the single entry point.
 
-Layered Design:
+## Layered Design:
 
-Domain Layer: Core business logic and domain events.
+- Domain Layer: Core business logic and domain events.
 
-Application Layer: Event handlers, services, and abstractions.
+- Application Layer: Event handlers, services, and abstractions.
 
-Infrastructure Layer: Persistence (EF Core), RabbitMQ integration (Outbox/Inbox/DLQ), notifications.
+- Infrastructure Layer: Persistence (EF Core), RabbitMQ integration (Outbox/Inbox/DLQ), notifications.
 
-Presentation Layer: Minimal API endpoints exposing RESTful routes.
+- Presentation Layer: Minimal API endpoints exposing RESTful routes.
 
-Event‑Driven Reliability:
+## Event‑Driven Reliability:
 
-Outbox Pattern: Ensures reliable publishing of domain events to RabbitMQ.
+- Outbox Pattern: Ensures reliable publishing of domain events to RabbitMQ.
 
-Inbox Pattern: Deduplicates consumed events using PayloadHash.
+- Inbox Pattern: Deduplicates consumed events using PayloadHash.
 
-Dead‑Letter Queue (DLQ): Captures failed messages for monitoring and alerting.
+- Dead‑Letter Queue (DLQ): Captures failed messages for monitoring and alerting.
 
-Background Services:
+## Background Services:
 
-OutboxPublisher: Publishes pending events to RabbitMQ.
+- OutboxPublisher: Publishes pending events to RabbitMQ.
 
-InboxConsumer: Subscribes to domain_events exchange, deduplicates, and dispatches handlers.
+- InboxConsumer: Subscribes to domain_events exchange, deduplicates, and dispatches handlers.
 
-DlqConsumer: Monitors DLQ and triggers alerts.
+- DlqConsumer: Monitors DLQ and triggers alerts.
 
-Cleanup workers for Outbox/Inbox TTL management.
+- Cleanup workers for Outbox/Inbox TTL management.
 
 ✨ Key Features
-.NET 8 Minimal API: Fast startup, reduced boilerplate, async‑first design.
 
-Entity Framework Core: Database persistence with migrations and LINQ queries.
+- .NET 8 Minimal API: Fast startup, reduced boilerplate, async‑first design.
 
-RabbitMQ Integration:
+- Entity Framework Core: Database persistence with migrations and LINQ queries.
 
-Async channel API (CreateChannelAsync, BasicPublishAsync, BasicConsumeAsync).
+## RabbitMQ Integration:
 
-Exchange/queue declarations with DLX support.
+- Async channel API (CreateChannelAsync, BasicPublishAsync, BasicConsumeAsync).
 
-Resilience & Reliability:
+- Exchange/queue declarations with DLX support.
 
-Polly pipelines for retries and exponential backoff.
+## Resilience & Reliability:
 
-Deduplication via Inbox records.
+- Polly pipelines for retries and exponential backoff.
 
-DLQ routing for failed messages.
+- Deduplication via Inbox records.
 
-Observability:
+- DLQ routing for failed messages.
 
-Structured logging with ILogger.
+## Observability:
 
-Metrics hooks for published/consumed/failed events.
+- Structured logging with ILogger.
 
-Notifications:
+- Metrics hooks for published/consumed/failed events.
 
-SendGrid integration for email alerts.
+## Notifications:
 
-Batch DLQ alerting to avoid inbox flooding.
+- SendGrid integration for email alerts.
 
-Security & Config:
+- Batch DLQ alerting to avoid inbox flooding.
 
-RabbitMQ credentials and SendGrid API keys stored in appsettings.json / secrets.
+## Security & Config:
 
-TLS support for RabbitMQ connections.
+- RabbitMQ credentials and SendGrid API keys stored in appsettings.json / secrets.
+
+- TLS support for RabbitMQ connections.
 
 🚀 Getting Started
-Clone & Restore
 
-bash
+- Clone & Restore
+
+```bash
 git clone <repo-url>
 dotnet restore
-Configure Settings
+```
 
-Update appsettings.json with RabbitMQ and SendGrid credentials.
+- Configure Settings
 
-Run Migrations
+- Update appsettings.json with RabbitMQ and SendGrid credentials.
 
-bash
+- Run Migrations
+
+```bash
 dotnet ef database update
+```
+
 Run the API
 
-bash
+```bash
 dotnet run
+```
+
 Minimal API endpoints will be available at https://localhost:<port>.
 
 📊 Reliability Loop
-text
+
+```text
 Domain Event → Outbox → RabbitMQ Exchange → Inbox Consumer → Deduplication → Handler
 ↓
 Dead-Letter Queue → Alerts (SendGrid)
+```
+
 🔮 Next Improvements
-Add OpenTelemetry tracing for distributed observability.
 
-Extend DLQ consumer with Slack/PagerDuty integration.
-
-Implement retry queues with TTL for controlled reprocessing.
-
-Harden security with secrets manager and TLS certificates.
+- Add OpenTelemetry tracing for distributed observability.
+- Extend DLQ consumer with Slack/PagerDuty integration.
+- Implement retry queues with TTL for controlled reprocessing.
+- Harden security with secrets manager and TLS certificates.
