@@ -26,7 +26,6 @@ builder.Services.AddScoped<IValidator<CreateOrderRequest>, CreateOrderValidator>
 // Middleware
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
-// Register endpoints
 builder.Services.AddScoped<IEndpoint, CreateOrderEndpoint>();
 builder.Services.AddScoped<IEndpoint, GetOrderByIdEndpoint>();
 
@@ -48,10 +47,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Map endpoints dynamically
-foreach (var endpoint in app.Services.GetRequiredService<IEnumerable<IEndpoint>>())
+// Map endpoints
+using (var scope = app.Services.CreateScope())
 {
-    endpoint.MapEndpoint(app);
+    var endpoints = scope.ServiceProvider.GetRequiredService<IEnumerable<IEndpoint>>();
+    foreach (var endpoint in endpoints)
+    {
+        endpoint.MapEndpoint(app);
+    }
 }
 
 //// static approach
@@ -70,29 +73,4 @@ foreach (var endpoint in app.Services.GetRequiredService<IEnumerable<IEndpoint>>
 //      .Produces(200)
 //      .Produces(404);
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
